@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QSAR Drug Compatibility Predictor</title>
+    <style>
+:root {
+--purple-1: #7c3aed;   /* violet */
+--purple-2: #a855f7;   /* purple */
+--purple-3: #d946ef;   /* pinkish purple */
+
+--glow-purple: 124, 58, 237;
+    --color-white: rgba(255, 255, 255, 1);
+    --color-black: rgba(0, 0, 0, 1);
+    --color-cream-50: rgba(252, 252, 249, 1);
+    --color-cream-100: rgba(255, 255, 253, 1);
+    --color-gray-200: rgba(245, 245, 245, 1);
+    --color-gray-300: rgba(167, 169, 169, 1);
+    --color-gray-400: rgba(119, 124, 124, 1);
+    --color-slate-500: rgba(98, 108, 113, 1);
+    --color-brown-600: rgba(94, 82, 64, 1);
+    --color-charcoal-700: rgba(31, 33, 33, 1);
+    --color-charcoal-800: rgba(38, 40, 40, 1);
+    --color-slate-900: rgba(19, 52, 59, 1);
+    --color-teal-300: rgba(50, 184, 198, 1);
+    --color-teal-400: rgba(45, 166, 178, 1);
+    --color-teal-500: rgba(33, 128, 141, 1);
+    --color-teal-600: rgba(29, 116, 128, 1);
+    --color-teal-700: rgba(26, 104, 115, 1);
+    --color-teal-800: rgba(41, 150, 161, 1);
+    --color-red-400: rgba(255, 84, 89, 1);
+    --color-red-500: rgba(192, 21, 47, 1);
+    --color-orange-400: rgba(230, 129, 97, 1);
+    --color-orange-500: rgba(168, 75, 47, 1);
+    --color-brown-600-rgb: 94, 82, 64;
+    --color-teal-500-rgb: 33, 128, 141;
+    --color-slate-900-rgb: 19, 52, 59;
+    --color-slate-500-rgb: 98, 108, 113;
+    --color-red-500-rgb: 192, 21, 47;
+    --color-red-400-rgb: 255, 84, 89;
+    --color-orange-500-rgb: 168, 75, 47;
+    --color-orange-400-rgb: 230, 129, 97;
+    --color-bg-1: rgba(59, 130, 246, 0.08);
+    --color-bg-2: rgba(245, 158, 11, 0.08);
+    --color-bg-3: rgba(34, 197, 94, 0.08);
+    --color-bg-4: rgba(239, 68, 68, 0.08);
+    --color-bg-5: rgba(147, 51, 234, 0.08);
+    --color-bg-6: rgba(249, 115, 22, 0.08);
+    --color-bg-7: rgba(236, 72, 153, 0.08);
+    --color-bg-8: rgba(6, 182, 212, 0.08);
+    --color-background: var(--color-cream-50);
+    --color-surface: var(--color-cream-100);
+    --color-text: var(--color-slate-900);
+    --color-text-secondary: var(--color-slate-500);
+    --color-primary: var(--purple-1);
+    --color-primary-hover: var(--purple-600);
+--color-primary-active: var(--purple-700);
+    --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+    --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+    --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+    --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+    --color-btn-primary-text: var(--color-cream-50);
+    --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+    --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+    --color-error: var(--color-red-500);
+    --color-success: var(--color-teal-500);
+    --color-warning: var(--color-orange-500);
+    --color-info: var(--color-slate-500);
+    --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+    --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+    --focus-ring: 0 0 0 3px var(--color-focus-ring);
+    --focus-outline: 2px solid var(--color-primary);
+    --status-bg-opacity: 0.15;
+    --status-border-opacity: 0.25;
+    --color-success-rgb: 33, 128, 141;
+    --color-error-rgb: 192, 21, 47;
+    --color-warning-rgb: 168, 75, 47;
+    --color-info-rgb: 98, 108, 113;
+    --font-family-base: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Inter", "Segoe UI", Roboto, sans-serif;
+    --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-size-xs: 11px;
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-md: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 20px;
+    --font-size-3xl: 24px;
+    --font-size-4xl: 30px;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 550;
+    --font-weight-bold: 600;
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --letter-spacing-tight: -0.01em;
+    --space-0: 0;
+    --space-1: 1px;
+    --space-2: 2px;
+    --space-4: 4px;
+    --space-6: 6px;
+    --space-8: 8px;
+    --space-10: 10px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-20: 20px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --radius-sm: 6px;
+    --radius-base: 8px;
+    --radius-md: 10px;
+    --radius-lg: 12px;
+    --radius-full: 9999px;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+    --duration-fast: 150ms;
+    --duration-normal: 250ms;
+    --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1280px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-gray-400-rgb: 119, 124, 124;
+        --color-teal-300-rgb: 50, 184, 198;
+        --color-gray-300-rgb: 167, 169, 169;
+        --color-gray-200-rgb: 245, 245, 245;
+        --color-bg-1: rgba(29, 78, 216, 0.15);
+        --color-bg-2: rgba(180, 83, 9, 0.15);
+        --color-bg-3: rgba(21, 128, 61, 0.15);
+        --color-bg-4: rgba(185, 28, 28, 0.15);
+        --color-bg-5: rgba(107, 33, 168, 0.15);
+        --color-bg-6: rgba(194, 65, 12, 0.15);
+        --color-bg-7: rgba(190, 24, 93, 0.15);
+        --color-bg-8: rgba(8, 145, 178, 0.15);
+        --color-background: var(--color-charcoal-700);
+        --color-surface: var(--color-charcoal-800);
+        --color-text: var(--color-gray-200);
+        --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+        --color-primary: var(--color-teal-300);
+        --color-primary-hover: var(--color-teal-400);
+        --color-primary-active: var(--color-teal-800);
+        --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+        --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+        --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+        --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+        --color-error: var(--color-red-400);
+        --color-success: var(--color-teal-300);
+        --color-warning: var(--color-orange-400);
+        --color-info: var(--color-gray-300);
+        --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+        --color-btn-primary-text: var(--color-slate-900);
+        --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+        --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+        --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+        --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+        --color-success-rgb: var(--color-teal-300-rgb);
+        --color-error-rgb: var(--color-red-400-rgb);
+        --color-warning-rgb: var(--color-orange-400-rgb);
+        --color-info-rgb: var(--color-gray-300-rgb);
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.08),
+    rgba(168, 85, 247, 0.08),
+    rgba(217, 70, 239, 0.06)
+);!important;
+    -webkit-font-smoothing: antialiased;
+scroll-behavior: smooth;
+}
+
+.container {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-16);
+}
+
+header {
+    text-align: center;
+    margin-bottom: var(--space-32);
+    padding: var(--space-32) 0;
+
+    background: #1E1E28A6;
+    backdrop-filter: blur(12px);
+
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+
+    box-shadow: inset 0 0 20px rgba(124, 58, 237, 0.25);
+}
+h1 {
+    font-size: clamp(3rem, 6vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+
+    margin-bottom: 12px;
+}
+.subtitle {
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.6;
+
+    color: var(--color-text-secondary);
+
+    max-width: 650px;
+    margin: 0 auto 40px;
+}
+.section {
+    background: var(--color-surface);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    margin-bottom: var(--space-24);
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+
+    margin-bottom: 24px;
+}
+h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.4;
+
+    margin-bottom: 6px;
+}
+.form-group {
+    margin-bottom: var(--space-16);
+}
+
+label {
+    display: block;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--space-8);
+    color: var(--color-text);
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: var(--space-8) var(--space-12);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: var(--focus-ring);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-10) var(--space-20);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+    border: none;
+    text-decoration: none;
+box-shadow:
+    0 0 12px rgba(124, 58, 237, 0.6),
+    0 0 25px rgba(168, 85, 247, 0.4);
+
+background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #a855f7,
+    #d946ef
+);
+
+color: white;
+}
+.btn:hover {
+    transform: translateY(-2px) scale(1.03);
+
+    box-shadow:
+        0 0 18px rgba(124, 58, 237, 0.9),
+        0 0 40px rgba(168, 85, 247, 0.7);
+}
+
+.btn-primary {
+    background: linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7,
+        #d946ef
+    );
+
+    color: white;
+
+    box-shadow:
+        0 0 12px rgba(124, 58, 237, 0.7),
+        0 0 30px rgba(168, 85, 247, 0.5);
+
+    border: none;
+}
+.btn-primary:hover {
+    transform: translateY(-2px) scale(1.03);
+
+    box-shadow:
+        0 0 18px rgba(124, 58, 237, 0.9),
+        0 0 40px rgba(168, 85, 247, 0.7);
+}
+
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: var(--color-secondary);
+    color: var(--color-text);
+}
+
+.btn-secondary:hover {
+    background: var(--color-secondary-hover);
+}
+
+.button-group {
+    display: flex;
+    gap: var(--space-12);
+    margin-top: var(--space-16);
+}
+
+.molecule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+}
+
+.molecule-card {
+    padding: var(--space-16);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-base);
+    background: var(--color-bg-1);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.molecule-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+}
+
+.molecule-card.selected {
+    border: 2px solid var(--color-primary);
+    background: var(--color-bg-5);
+}
+
+.molecule-card h3 {
+    margin-top: 0;
+    margin-bottom: 4px;
+    color: var(--color-primary);
+}
+
+.molecule-info {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: var(--space-4) 0;
+}
+
+.selection-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-20);
+    margin-top: var(--space-20);
+}
+
+.selection-card {
+    padding: var(--space-20);
+    border: 2px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-2);
+}
+
+.selection-card.active {
+    border-color: var(--color-primary);
+}
+
+.selection-card h3 {
+    color: var(--color-primary);
+    margin-top: 0;
+}
+
+.properties-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--space-16);
+}
+
+.properties-table th,
+.properties-table td {
+    padding: var(--space-8);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.properties-table th {
+    background: var(--color-secondary);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+}
+
+.result-card {
+    background: var(--color-bg-3);
+    border: 2px solid var(--color-success);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    margin-top: var(--space-20);
+}
+
+.result-card.negative {
+    background: var(--color-bg-4);
+    border-color: var(--color-error);
+}
+
+.outcome-badge {
+    display: inline-block;
+    padding: var(--space-8) var(--space-20);
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-16);
+}
+
+.outcome-badge.positive {
+    background: rgba(var(--color-success-rgb), 0.15);
+    color: var(--color-success);
+    border: 2px solid var(--color-success);
+}
+
+.outcome-badge.negative {
+    background: rgba(var(--color-error-rgb), 0.15);
+    color: var(--color-error);
+    border: 2px solid var(--color-error);
+}
+
+.confidence-meter {
+    margin: var(--space-20) 0;
+}
+
+.meter-container {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background: var(--color-secondary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.meter-bar {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    transition: width 0.8s var(--ease-standard);
+}
+
+.meter-value {
+    position: absolute;
+    top: 50%;
+    right: var(--space-16);
+    transform: translateY(-50%);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--color-secondary);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: var(--space-8);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-6) var(--space-12);
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+}
+
+.status.success {
+    background-color: rgba(var(--color-success-rgb), var(--status-bg-opacity));
+    color: var(--color-success);
+    border: 1px solid rgba(var(--color-success-rgb), var(--status-border-opacity));
+}
+
+.status.error {
+    background-color: rgba(var(--color-error-rgb), var(--status-bg-opacity));
+    color: var(--color-error);
+    border: 1px solid rgba(var(--color-error-rgb), var(--status-border-opacity));
+}
+
+.status.info {
+    background-color: rgba(var(--color-info-rgb), var(--status-bg-opacity));
+    color: var(--color-info);
+    border: 1px solid rgba(var(--color-info-rgb), var(--status-border-opacity));
+}
+
+.hidden {
+    display: none;
+}
+
+code {
+    background: var(--color-secondary);
+    padding: var(--space-2) var(--space-6);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+}
+
+footer {
+    text-align: center;
+    padding: var(--space-32) 0;
+    margin-top: var(--space-32);
+    border-top: 1px solid var(--color-card-border);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+@media (max-width: 768px) {
+    .selection-display {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
+/* ============================= */
+/* APPLE STYLE BACKGROUND */
+/* ============================= */
+
+html, body {
+
+    background:
+        radial-gradient(circle at top left, #f5f5f7, transparent 60%),
+        radial-gradient(circle at bottom right, #e5e7eb, transparent 60%),
+        linear-gradient(180deg, #ffffff, #f3f4f6);
+
+    min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+    html, body {
+        background:
+            radial-gradient(circle at top left, #1f1f23, transparent 60%),
+            radial-gradient(circle at bottom right, #2a2a30, transparent 60%),
+            linear-gradient(180deg, #0f0f12, #1a1a1f);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+
+        color: rgba(255,255,255,0.9);
+    }
+}
+
+/* ============================= */
+/* PREMIUM FUTURISTIC EFFECTS   */
+/* ============================= */
+
+/* 1. Glowing Cards */
+.molecule-card,
+.section,
+.selection-card,
+.result-card {
+    transition: all 0.4s ease;
+}
+
+.molecule-card:hover,
+.section:hover,
+.selection-card:hover {
+    box-shadow:
+        0 0 0 1px rgba(124, 58, 237, 0.5),
+        0 0 30px rgba(124, 58, 237, 0.35),
+        0 0 60px rgba(168, 85, 247, 0.25);
+}
+
+/* 2. Glass Blur Panels */
+.section,
+.molecule-card,
+.selection-card,
+.result-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(12px);
+}
+
+@media (prefers-color-scheme: dark) {
+    .section,
+    .molecule-card,
+    .selection-card,
+    .result-card {
+        background: rgba(30, 30, 40, 0.65);
+    }
+}
+
+/* 3. Animated Gradient Background */
+html, body {
+    background-size: 300% 300%;
+    animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 4. Neon Borders */
+.section,
+.molecule-card,
+.selection-card {
+    border: 1px solid rgba(124, 58, 237, 0.4);
+}
+
+/* FORCE PURPLE GRADIENT ON ALL BUTTON VARIANTS */
+.btn-primary,
+.btn-secondary,
+.btn {
+    background: linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7,
+        #d946ef
+    ) !important;
+
+    color: white !important;
+}
+/* ============================= */
+/* VISIBLE CHEMISTRY PARTICLES  */
+/* ============================= */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+
+    background:
+        radial-gradient(circle, rgba(255,255,255,0.6) 2px, transparent 2px),
+        radial-gradient(circle, rgba(200,150,255,0.5) 3px, transparent 3px),
+        radial-gradient(circle, rgba(255,180,255,0.4) 4px, transparent 4px);
+
+    background-size: 100px 100px, 180px 180px, 250px 250px;
+
+    filter: drop-shadow(0 0 6px rgba(200,150,255,0.8));
+
+    animation: floatParticles 80s linear infinite;
+}
+
+@keyframes floatParticles {
+    from { transform: translateY(0); }
+    to { transform: translateY(-1200px); }
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+
+    background-size: 40px 40px;
+    background-repeat: repeat;
+
+    z-index: 0;
+    pointer-events: none;
+
+    animation: gridLoop 60s linear infinite;
+}
+@keyframes gridLoop {
+    from {
+        background-position: 0 0, 0 0;
+    }
+    to {
+        background-position: 0 40px, 40px 0;
+    }
+}
+body::before {
+    animation: gridMove 120s linear infinite;
+}
+
+@keyframes gridMove {
+    from { background-position: 0 0; }
+    to { background-position: 0 1000px; }
+}
+/* Push all content above background grid */
+.container,
+header,
+section,
+footer {
+    position: relative;
+    z-index: 2;
+}
+
+/* ============================= */
+/* SCROLL SCALE ANIMATION */
+/* ============================= */
+
+.section,
+.molecule-card,
+.selection-card {
+    transform: scale(0.97);
+    opacity: 0.7;
+    transition: 
+        transform 0.6s ease,
+        opacity 0.6s ease;
+}
+
+.section.in-view,
+.molecule-card.in-view,
+.selection-card.in-view {
+    transform: scale(1);
+    opacity: 1;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>C H E M I S I S</h1>
+            <p class="subtitle">Predict molecular compatibility using PubChem API and QSAR modeling</p>
+        </header>
+
+        <div class="section">
+            <h2>🔍 Search Compounds via PubChem</h2>
+            
+            <div class="form-group">
+                <label for="searchType">Search By:</label>
+                <select id="searchType">
+                    <option value="name">Compound Name</option>
+                    <option value="cid">PubChem CID</option>
+                    <option value="smiles">SMILES String</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="searchQuery">Enter Search Query:</label>
+                <input type="text" id="searchQuery" placeholder="e.g., Aspirin, 2244, or CC(=O)Oc1ccccc1C(=O)O">
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" id="searchBtn">Search PubChem</button>
+                <button class="btn btn-secondary" id="loadExamplesBtn">Load Example Compounds</button>
+            </div>
+
+            <div id="searchStatus"></div>
+        </div>
+
+        <div class="section">
+            <h2>📋 Available Compounds</h2>
+            <p style="color: var(--color-text-secondary); margin-bottom: var(--space-16);">
+                Select two compounds to analyze their compatibility
+            </p>
+            <div id="compoundsList" class="molecule-grid">
+                <!-- Compounds will be populated here -->
+            </div>
+        </div>
+
+        <div class="section" id="selectionSection">
+            <h2>✅ Selected Compounds</h2>
+            <div class="selection-display">
+                <div class="selection-card" id="selectionA">
+                    <h3>Compound A</h3>
+                    <p style="color: var(--color-text-secondary);">No compound selected</p>
+                </div>
+                <div class="selection-card" id="selectionB">
+                    <h3>Compound B</h3>
+                    <p style="color: var(--color-text-secondary);">No compound selected</p>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: var(--space-20);">
+                <label for="strategySelect">Prediction Strategy:</label>
+                <select id="strategySelect">
+                    <option value="average">Average Properties</option>
+                    <option value="product">Product Properties</option>
+                    <option value="weighted">Weighted Combination</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" id="predictBtn" disabled style="width: 100%; margin-top: var(--space-16);">
+                🔮 Predict Compatibility
+            </button>
+        </div>
+
+        <div class="section hidden" id="resultsSection">
+            <h2>📊 Prediction Results</h2>
+            <div id="resultsContent"></div>
+        </div>
+
+        <footer>
+            <p><strong>QSAR Drug Compatibility Predictor</strong></p>
+            <p>Powered by PubChem API | Educational and Research Purposes Only</p>
+            <p style="margin-top: var(--space-8); font-size: var(--font-size-xs);">
+                ⚠️ This tool provides theoretical predictions only and should not be used for medical decisions
+            </p>
+        </footer>
+    </div>
+
+    <script>
+// State management
+let compounds = [];
+let selectedA = null;
+let selectedB = null;
+
+// Example compounds database
+const exampleCompounds = [
+    { name: "Aspirin", smiles: "CC(=O)Oc1ccccc1C(=O)O", cid: "2244", mw: 180.16, hbd: 1, hba: 3, logp: 1.19, rotbonds: 3, tpsa: 63.6, hac: 13, aromatic_rings: 1 },
+  { name: "Caffeine", smiles: "CN1C=NC2=C1C(=O)N(C(=O)N2C)C", cid: "2519", mw: 194.19, hbd: 0, hba: 3, logp: -0.16, rotbonds: 0, tpsa: 49.6, hac: 14, aromatic_rings: 2 },
+  { name: "Ibuprofen", smiles: "CC(C)Cc1ccc(cc1)C(C)C(=O)O", cid: "3672", mw: 206.28, hbd: 1, hba: 2, logp: 3.97, rotbonds: 3, tpsa: 37.3, hac: 13, aromatic_rings: 1 },
+  { name: "Paracetamol", smiles: "CC(=O)Nc1ccc(O)cc1", cid: "1983", mw: 151.16, hbd: 2, hba: 2, logp: 0.46, rotbonds: 1, tpsa: 49.3, hac: 8, aromatic_rings: 1 },
+  { name: "Theophylline", smiles: "CN1C=NC2=C1C(=O)N(C(=O)N2C)C", cid: "2153", mw: 180.17, hbd: 0, hba: 4, logp: -0.76, rotbonds: 0, tpsa: 65.2, hac: 12, aromatic_rings: 2 },
+  { name: "Nicotine", smiles: "CN1CCCC1c1cccnc1", cid: "942", mw: 162.23, hbd: 0, hba: 1, logp: 1.09, rotbonds: 2, tpsa: 16.1, hac: 10, aromatic_rings: 1 },
+  { name: "Morphine", smiles: "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@@H]3[C@H](C4)O", cid: "5288826", mw: 285.34, hbd: 2, hba: 3, logp: 0.89, rotbonds: 1, tpsa: 48.4, hac: 17, aromatic_rings: 2 },
+  { name: "Cholesterol", smiles: "CC(C)CCCC(C)C1CCC2C1(CCCC2=CC=C3CC(CCC3=C)O)C", cid: "5997", mw: 386.65, hbd: 1, hba: 1, logp: 5.07, rotbonds: 6, tpsa: 20.2, hac: 27, aromatic_rings: 0 },
+  { name: "Beta-Carotene", smiles: "CC(=CCCC(C)(C)C=CC(=CC=CC(=CC=CC=C(C)C=CC(=CC=CC=C(C)C=CC(=C)C)C)C)C)C", cid: "5280489", mw: 536.88, hbd: 0, hba: 0, logp: 10.30, rotbonds: 11, tpsa: 0.0, hac: 40, aromatic_rings: 0 },
+  { name: "Codeine", smiles: "COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@]134", cid: "5284371", mw: 299.37, hbd: 1, hba: 3, logp: 1.26, rotbonds: 1, tpsa: 45.1, hac: 18, aromatic_rings: 2 },
+  { name: "Testosterone", smiles: "CC12CCC3C(C1CCC2O)CCC4=CC(=O)CCC34C", cid: "6013", mw: 288.42, hbd: 1, hba: 2, logp: 3.32, rotbonds: 0, tpsa: 37.3, hac: 20, aromatic_rings: 0 },
+  { name: "Estradiol", smiles: "CC12CCC3c4ccc(O)cc4CCC3C1CCC2O", cid: "5757", mw: 272.38, hbd: 2, hba: 2, logp: 3.94, rotbonds: 0, tpsa: 40.5, hac: 20, aromatic_rings: 1 },
+  { name: "Alanine", smiles: "CC(C(=O)O)N", cid: "5950", mw: 89.09, hbd: 2, hba: 3, logp: -2.85, rotbonds: 1, tpsa: 63.3, hac: 5, aromatic_rings: 0 },
+  { name: "Penicillin G", smiles: "CC1(C)SC2C(NC(=O)Cc3ccccc3)C(=O)N2C1C(=O)O", cid: "5904", mw: 334.39, hbd: 2, hba: 5, logp: 1.83, rotbonds: 4, tpsa: 86.6, hac: 18, aromatic_rings: 1 },
+  { name: "Ampicillin", smiles: "CC1(C)SC2C(NC(=O)C(N)c3ccccc3)C(=O)N2C1C(=O)O", cid: "6249", mw: 349.40, hbd: 3, hba: 5, logp: 0.74, rotbonds: 4, tpsa: 138.0, hac: 19, aromatic_rings: 1 },
+  { name: "Chloramphenicol", smiles: "C1=CC(=CC=C1C(C(CO)NC(=O)C(Cl)Cl)O)[N+](=O)[O-]", cid: "5959", mw: 323.13, hbd: 3, hba: 6, logp: 1.14, rotbonds: 5, tpsa: 115.4, hac: 16, aromatic_rings: 1 },
+  { name: "Tetracycline", smiles: "CN(C)C1C2C(C3C(C(=O)C(=C(C3(C(=O)C2=C(C4=C1C=CC=C4O)O)O)O)C(=O)N)O)O", cid: "54675776", mw: 444.43, hbd: 6, hba: 9, logp: -1.37, rotbonds: 2, tpsa: 181.6, hac: 26, aromatic_rings: 2 },
+  { name: "Streptomycin", smiles: "CNC1C(C(C(C(O1)OC2C(C(C(C(O2)OC3C(C(C(CO3)O)O)NC(=O)N)N)O)O)N)O)O", cid: "19649", mw: 581.58, hbd: 11, hba: 15, logp: -5.61, rotbonds: 7, tpsa: 330.8, hac: 31, aromatic_rings: 0 }
+
+];
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    setupEventListeners();
+    showStatus('Click "Load Example Compounds" to start or search for specific compounds', 'info');
+});
+
+function setupEventListeners() {
+    document.getElementById('searchBtn').addEventListener('click', searchPubChem);
+    document.getElementById('loadExamplesBtn').addEventListener('click', loadExamples);
+    document.getElementById('predictBtn').addEventListener('click', predictCompatibility);
+    document.getElementById('searchQuery').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchPubChem();
+    });
+}
+
+// Search PubChem API
+async function searchPubChem() {
+    const searchType = document.getElementById('searchType').value;
+    const query = document.getElementById('searchQuery').value.trim();
+    
+    if (!query) {
+        showStatus('Please enter a search query', 'error');
+        return;
+    }
+    
+    showStatus('Searching PubChem...', 'info', true);
+    
+    try {
+        let cid;
+        
+        // Get CID based on search type
+        if (searchType === 'name') {
+            cid = await getCIDByName(query);
+        } else if (searchType === 'cid') {
+            cid = query;
+        } else if (searchType === 'smiles') {
+            cid = await getCIDBySMILES(query);
+        }
+        
+        if (!cid) {
+            showStatus('Compound not found in PubChem', 'error');
+            return;
+        }
+        
+        // Fetch compound properties
+        const compound = await fetchCompoundProperties(cid);
+        
+        if (compound) {
+            compounds.push(compound);
+            renderCompounds();
+            showStatus(`Successfully loaded: ${compound.name}`, 'success');
+            document.getElementById('searchQuery').value = '';
+        }
+        
+    } catch (error) {
+        console.error('Search error:', error);
+        showStatus('Error searching PubChem: ' + error.message, 'error');
+    }
+}
+
+// Get CID by compound name
+async function getCIDByName(name) {
+    const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(name)}/cids/JSON`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data.IdentifierList && data.IdentifierList.CID) {
+        return data.IdentifierList.CID[0].toString();
+    }
+    return null;
+}
+
+// Get CID by SMILES
+async function getCIDBySMILES(smiles) {
+    const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${encodeURIComponent(smiles)}/cids/JSON`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data.IdentifierList && data.IdentifierList.CID) {
+        return data.IdentifierList.CID[0].toString();
+    }
+    return null;
+}
+
+// Fetch compound properties from PubChem
+async function fetchCompoundProperties(cid) {
+    try {
+        const properties = [
+            'MolecularFormula',
+            'MolecularWeight',
+            'CanonicalSMILES',
+            'IUPACName',
+            'XLogP',
+            'TPSA',
+            'HBondDonorCount',
+            'HBondAcceptorCount',
+            'RotatableBondCount',
+            'HeavyAtomCount'
+        ].join(',');
+        
+        const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/property/${properties}/JSON`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.PropertyTable && data.PropertyTable.Properties[0]) {
+            const props = data.PropertyTable.Properties[0];
+            
+            return {
+                cid: cid,
+                name: props.IUPACName || `Compound ${cid}`,
+                formula: props.MolecularFormula || 'N/A',
+                mw: parseFloat(props.MolecularWeight) || 0,
+                smiles: props.CanonicalSMILES || '',
+                logp: parseFloat(props.XLogP) || 0,
+                tpsa: parseFloat(props.TPSA) || 0,
+                hbd: parseInt(props.HBondDonorCount) || 0,
+                hba: parseInt(props.HBondAcceptorCount) || 0,
+                rotbonds: parseInt(props.RotatableBondCount) || 0,
+                hac: parseInt(props.HeavyAtomCount) || 0,
+                aromatic_rings: 0 // Not directly available from PubChem, would need calculation
+            };
+        }
+        
+    } catch (error) {
+        console.error('Error fetching compound:', error);
+        throw error;
+    }
+    
+    return null;
+}
+
+// Load example compounds
+async function loadExamples() {
+    showStatus('Loading example compounds from PubChem...', 'info', true);
+    compounds = [];
+    
+    let loaded = 0;
+    for (const example of exampleCompounds) {
+        try {
+            const compound = await fetchCompoundProperties(example.cid);
+            if (compound) {
+                compound.name = example.name; // Override with common name
+                compounds.push(compound);
+                loaded++;
+            }
+        } catch (error) {
+            console.error(`Error loading ${example.name}:`, error);
+        }
+    }
+    
+    renderCompounds();
+    showStatus(`Successfully loaded ${loaded} example compounds`, 'success');
+}
+
+// Render compounds list
+function renderCompounds() {
+    const container = document.getElementById('compoundsList');
+    
+    if (compounds.length === 0) {
+        container.innerHTML = '<p style="color: var(--color-text-secondary);">No compounds loaded. Search PubChem or load examples.</p>';
+        return;
+    }
+    
+    container.innerHTML = compounds.map((compound, index) => `
+        <div class="molecule-card ${(selectedA === index || selectedB === index) ? 'selected' : ''}" 
+             onclick="selectCompound(${index})">
+            <h3>${compound.name}</h3>
+            <p class="molecule-info"><strong>Formula:</strong> ${compound.formula}</p>
+            <p class="molecule-info"><strong>MW:</strong> ${compound.mw.toFixed(2)} g/mol</p>
+            <p class="molecule-info"><strong>LogP:</strong> ${compound.logp.toFixed(2)}</p>
+            <p class="molecule-info"><strong>TPSA:</strong> ${compound.tpsa.toFixed(1)} Ų</p>
+            <p class="molecule-info"><strong>CID:</strong> ${compound.cid}</p>
+            <p class="molecule-info" style="margin-top: var(--space-8); font-size: var(--font-size-xs);">
+                <code>${compound.smiles.substring(0, 30)}${compound.smiles.length > 30 ? '...' : ''}</code>
+            </p>
+        </div>
+    `).join('');
+}
+
+// Select compound for analysis
+function selectCompound(index) {
+    if (selectedA === null) {
+        selectedA = index;
+        updateSelection('A', compounds[index]);
+    } else if (selectedB === null && index !== selectedA) {
+        selectedB = index;
+        updateSelection('B', compounds[index]);
+        document.getElementById('predictBtn').disabled = false;
+    } else {
+        // Reset selections
+        selectedA = index;
+        selectedB = null;
+        updateSelection('A', compounds[index]);
+        updateSelection('B', null);
+        document.getElementById('predictBtn').disabled = true;
+    }
+    
+    renderCompounds();
+}
+
+// Update selection display
+function updateSelection(slot, compound) {
+    const card = document.getElementById(`selection${slot}`);
+    
+    if (!compound) {
+        card.classList.remove('active');
+        card.innerHTML = `
+            <h3>Compound ${slot}</h3>
+            <p style="color: var(--color-text-secondary);">No compound selected</p>
+        `;
+        return;
+    }
+    
+    card.classList.add('active');
+    card.innerHTML = `
+        <h3>Compound ${slot}: ${compound.name}</h3>
+        <p class="molecule-info"><strong>Formula:</strong> ${compound.formula}</p>
+        <p class="molecule-info"><strong>MW:</strong> ${compound.mw.toFixed(2)} g/mol</p>
+        <p class="molecule-info"><strong>LogP:</strong> ${compound.logp.toFixed(2)}</p>
+        <p class="molecule-info"><strong>TPSA:</strong> ${compound.tpsa.toFixed(1)} Ų</p>
+        <p class="molecule-info"><strong>H-Bond Donors:</strong> ${compound.hbd}</p>
+        <p class="molecule-info"><strong>H-Bond Acceptors:</strong> ${compound.hba}</p>
+        <p class="molecule-info"><strong>Rotatable Bonds:</strong> ${compound.rotbonds}</p>
+        <p class="molecule-info"><strong>Heavy Atoms:</strong> ${compound.hac}</p>
+    `;
+}
+
+// QSAR Prediction Model
+function predictCompatibility() {
+    if (selectedA === null || selectedB === null) return;
+    
+    const compA = compounds[selectedA];
+    const compB = compounds[selectedB];
+    const strategy = document.getElementById('strategySelect').value;
+    
+    // Calculate combined properties based on strategy
+    let combinedProps;
+    
+    if (strategy === 'average') {
+        combinedProps = {
+            mw: (compA.mw + compB.mw) / 2,
+            logp: (compA.logp + compB.logp) / 2,
+            tpsa: (compA.tpsa + compB.tpsa) / 2,
+            hbd: (compA.hbd + compB.hbd) / 2,
+            hba: (compA.hba + compB.hba) / 2,
+            rotbonds: (compA.rotbonds + compB.rotbonds) / 2,
+            hac: (compA.hac + compB.hac) / 2
+        };
+    } else if (strategy === 'product') {
+        combinedProps = {
+            mw: Math.sqrt(compA.mw * compB.mw),
+            logp: (compA.logp * compB.logp),
+            tpsa: Math.sqrt(compA.tpsa * compB.tpsa),
+            hbd: Math.sqrt(compA.hbd * compB.hbd),
+            hba: Math.sqrt(compA.hba * compB.hba),
+            rotbonds: Math.sqrt(compA.rotbonds * compB.rotbonds),
+            hac: Math.sqrt(compA.hac * compB.hac)
+        };
+    } else { // weighted
+        combinedProps = {
+            mw: (compA.mw * 0.6 + compB.mw * 0.4),
+            logp: (compA.logp * 0.6 + compB.logp * 0.4),
+            tpsa: (compA.tpsa * 0.6 + compB.tpsa * 0.4),
+            hbd: (compA.hbd * 0.6 + compB.hbd * 0.4),
+            hba: (compA.hba * 0.6 + compB.hba * 0.4),
+            rotbonds: (compA.rotbonds * 0.6 + compB.rotbonds * 0.4),
+            hac: (compA.hac * 0.6 + compB.hac * 0.4)
+        };
+    }
+    
+    // QSAR scoring based on Lipinski's Rule of Five and drug-likeness
+    const prediction = calculateQSARScore(combinedProps, compA, compB);
+    
+    displayResults(prediction, compA, compB, strategy);
+}
+
+// Calculate QSAR compatibility score
+function calculateQSARScore(combined, compA, compB) {
+    let score = 0;
+    let factors = [];
+    
+    // Molecular Weight (favorable: 180-500)
+    if (combined.mw >= 180 && combined.mw <= 500) {
+        score += 20;
+        factors.push({ name: 'Molecular Weight', value: combined.mw.toFixed(2), status: 'optimal' });
+    } else {
+        score += 10;
+        factors.push({ name: 'Molecular Weight', value: combined.mw.toFixed(2), status: 'suboptimal' });
+    }
+    
+    // LogP (favorable: -0.4 to 5.6)
+    if (combined.logp >= -0.4 && combined.logp <= 5.6) {
+        score += 20;
+        factors.push({ name: 'LogP (Lipophilicity)', value: combined.logp.toFixed(2), status: 'optimal' });
+    } else {
+        score += 10;
+        factors.push({ name: 'LogP (Lipophilicity)', value: combined.logp.toFixed(2), status: 'suboptimal' });
+    }
+    
+    // H-Bond Donors (favorable: ≤5)
+    if (combined.hbd <= 5) {
+        score += 15;
+        factors.push({ name: 'H-Bond Donors', value: combined.hbd.toFixed(0), status: 'optimal' });
+    } else {
+        score += 5;
+        factors.push({ name: 'H-Bond Donors', value: combined.hbd.toFixed(0), status: 'suboptimal' });
+    }
+    
+    // H-Bond Acceptors (favorable: ≤10)
+    if (combined.hba <= 10) {
+        score += 15;
+        factors.push({ name: 'H-Bond Acceptors', value: combined.hba.toFixed(0), status: 'optimal' });
+    } else {
+        score += 5;
+        factors.push({ name: 'H-Bond Acceptors', value: combined.hba.toFixed(0), status: 'suboptimal' });
+    }
+    
+    // TPSA (favorable: 20-140)
+    if (combined.tpsa >= 20 && combined.tpsa <= 140) {
+        score += 15;
+        factors.push({ name: 'TPSA', value: combined.tpsa.toFixed(1), status: 'optimal' });
+    } else {
+        score += 5;
+        factors.push({ name: 'TPSA', value: combined.tpsa.toFixed(1), status: 'suboptimal' });
+    }
+    
+    // Rotatable Bonds (favorable: ≤10)
+    if (combined.rotbonds <= 10) {
+        score += 10;
+        factors.push({ name: 'Rotatable Bonds', value: combined.rotbonds.toFixed(0), status: 'optimal' });
+    } else {
+        score += 5;
+        factors.push({ name: 'Rotatable Bonds', value: combined.rotbonds.toFixed(0), status: 'suboptimal' });
+    }
+    
+    // Structural similarity bonus
+    const similarity = calculateSimilarity(compA, compB);
+    score += similarity * 5;
+    
+    const outcome = score >= 70 ? 'Compatible' : 'Potentially Incompatible';
+    const confidence = Math.min(score, 100);
+    
+    return {
+        outcome,
+        confidence,
+        score,
+        factors,
+        similarity: similarity.toFixed(2)
+    };
+}
+
+// Calculate structural similarity (simplified)
+function calculateSimilarity(compA, compB) {
+    const propA = [compA.mw / 500, compA.logp / 5, compA.tpsa / 140, compA.hbd / 5, compA.hba / 10];
+    const propB = [compB.mw / 500, compB.logp / 5, compB.tpsa / 140, compB.hbd / 5, compB.hba / 10];
+    
+    let dotProduct = 0;
+    let magA = 0;
+    let magB = 0;
+    
+    for (let i = 0; i < propA.length; i++) {
+        dotProduct += propA[i] * propB[i];
+        magA += propA[i] * propA[i];
+        magB += propB[i] * propB[i];
+    }
+    
+    return dotProduct / (Math.sqrt(magA) * Math.sqrt(magB));
+}
+
+// Display prediction results
+function displayResults(prediction, compA, compB, strategy) {
+    const resultsSection = document.getElementById('resultsSection');
+    const resultsContent = document.getElementById('resultsContent');
+    
+    const isPositive = prediction.outcome === 'Compatible';
+    
+    resultsContent.innerHTML = `
+        <div class="result-card ${isPositive ? 'positive' : 'negative'}">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-16);">
+                <span class="outcome-badge ${isPositive ? 'positive' : 'negative'}">
+                    ${prediction.outcome}
+                </span>
+                <span style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
+                    Strategy: ${strategy.charAt(0).toUpperCase() + strategy.slice(1)}
+                </span>
+            </div>
+            
+            <div class="confidence-meter">
+                <label>Confidence Score:</label>
+                <div class="meter-container">
+                    <div class="meter-bar" style="width: ${prediction.confidence}%"></div>
+                    <span class="meter-value">${prediction.confidence.toFixed(1)}%</span>
+                </div>
+            </div>
+            
+            <p style="margin: var(--space-16) 0; line-height: 1.6;">
+                The QSAR model predicts <strong>${prediction.outcome}</strong> compatibility 
+                between <strong>${compA.name}</strong> and <strong>${compB.name}</strong> 
+                with ${prediction.confidence.toFixed(1)}% confidence based on combined molecular properties.
+            </p>
+            
+            <div style="background: var(--color-surface); padding: var(--space-16); border-radius: var(--radius-base); margin: var(--space-16) 0;">
+                <h3 style="margin-top: 0;">Molecular Property Analysis</h3>
+                <table class="properties-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Combined Value</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${prediction.factors.map(factor => `
+                            <tr>
+                                <td>${factor.name}</td>
+                                <td>${factor.value}</td>
+                                <td>
+                                    <span class="status ${factor.status === 'optimal' ? 'success' : 'error'}">
+                                        ${factor.status === 'optimal' ? '✓ Optimal' : '⚠ Suboptimal'}
+                                    </span>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="background: var(--color-bg-7); padding: var(--space-16); border-radius: var(--radius-base); border: 1px solid var(--color-card-border);">
+                <p style="margin: 0; font-size: var(--font-size-sm);">
+                    <strong>📊 Overall QSAR Score:</strong> ${prediction.score}/100<br>
+                    <strong>🔬 Structural Similarity:</strong> ${prediction.similarity}<br>
+                    <strong>🧪 Compound A:</strong> ${compA.name} (CID: ${compA.cid})<br>
+                    <strong>🧪 Compound B:</strong> ${compB.name} (CID: ${compB.cid})
+                </p>
+            </div>
+        </div>
+    `;
+    
+    resultsSection.classList.remove('hidden');
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Show status message
+function showStatus(message, type = 'info', loading = false) {
+    const statusDiv = document.getElementById('searchStatus');
+    const loadingSpinner = loading ? '<span class="loading"></span>' : '';
+    
+    statusDiv.innerHTML = `
+        <div style="margin-top: var(--space-16);">
+            <span class="status ${type}">${message}${loadingSpinner}</span>
+        </div>
+    `;
+}
+    </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("in-view");
+                } else {
+                    entry.target.classList.remove("in-view");
+                }
+            });
+        },
+        {
+            threshold: 0.4
+        }
+    );
+
+    document.querySelectorAll(
+        ".section, .molecule-card, .selection-card"
+    ).forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>

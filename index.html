@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHEMISES</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ---------- GLOBAL ---------- */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:#000;
+  color:#fff;
+  overflow-y:scroll;
+}
+
+section{
+  height:100vh;
+  scroll-snap-align:start;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:80px;
+}
+
+.container{
+  max-width:1100px;
+}
+
+h1{
+  font-size:4rem;
+  letter-spacing:2px;
+}
+
+h2{
+  font-size:2.5rem;
+  margin-bottom:20px;
+}
+
+p{
+  font-size:1.2rem;
+  line-height:1.7;
+  color:#ccc;
+}
+
+button{
+  margin-top:30px;
+  padding:15px 40px;
+  background:white;
+  color:black;
+  border:none;
+  font-size:1rem;
+  border-radius:40px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#888;
+  transform:scale(1.05);
+}
+
+/* ---------- SCROLL SNAP ---------- */
+main{
+  scroll-snap-type:y mandatory;
+}
+
+/* ---------- HERO PARALLAX ---------- */
+.hero{
+  background:url("https://images.unsplash.com/photo-1532187863486-abf9dbad1b69") center/cover no-repeat;
+  position:relative;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+/* ---------- REVEAL ANIMATION ---------- */
+.reveal{
+  opacity:0;
+  transform:translateY(80px);
+  transition:1.2s ease;
+}
+
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ---------- DARK SECTIONS ---------- */
+.dark{
+  background:#000;
+}
+
+.gray{
+  background:#111;
+}
+
+/* ---------- PARALLAX EFFECT ---------- */
+.parallax{
+  background-attachment:fixed;
+}
+
+/* ---------- FOOTER ---------- */
+footer{
+  background:#000;
+  padding:40px;
+  text-align:center;
+  color:#777;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<!-- HERO -->
+<section class="hero parallax">
+  <div class="hero-content reveal">
+    <h1>CHEMISES</h1>
+    <p>Intelligent Molecular Prediction Platform</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="dark">
+  <div class="container reveal">
+    <h2>What is Chemises?</h2>
+    <p>
+      The Chemises project presents an intelligent QSAR 
+      (Quantitative Structure–Activity Relationship) based system 
+      designed to predict chemical behavior and potential outcomes 
+      of molecular combinations using computational modeling.
+    </p>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="gray">
+  <div class="container reveal">
+    <h2>Why Computational Chemistry?</h2>
+    <p>
+      Traditional laboratory experimentation in chemistry and pharmaceuticals 
+      demands significant time, cost, and resources.  
+      Computational approaches offer faster, scalable, and cost-effective 
+      alternatives for chemical analysis and drug discovery.
+    </p>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section class="dark">
+  <div class="container reveal">
+    <h2>Powered by Molecular Data</h2>
+    <p>
+      Chemises leverages molecular data sourced from the PubChem API 
+      and extracts key descriptors such as:
+      Molecular Weight, LogP, Hydrogen Bond Donors, 
+      Hydrogen Bond Acceptors, and more.
+    </p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="gray">
+  <div class="container reveal">
+    <h2>Core Capabilities</h2>
+    <p>
+      ✔ Molecular Descriptor Extraction  
+      ✔ QSAR Model Prediction  
+      ✔ Real-time Chemical Property Analysis  
+      ✔ Interactive Visualizations  
+      ✔ Machine Learning Powered Insights
+    </p>
+  </div>
+</section>
+
+<!-- REDIRECT -->
+<section class="dark">
+  <div class="container reveal">
+    <h2>Explore the Project</h2>
+    <p>
+      Access the complete Chemises system and run predictions.
+    </p>
+
+    <!-- Replace link -->
+    <button onclick="window.location.href='https://aryatejmore.github.io/Chemises/'">
+      Launch Chemises
+    </button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>© 2026 Chemises Project | BSc IT Final Year</p>
+</footer>
+
+<script>
+
+/* ---------- SCROLL REVEAL ---------- */
+const reveals = document.querySelectorAll('.reveal');
+
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("active");
+    }
+  });
+},{threshold:0.2});
+
+reveals.forEach(el=>observer.observe(el));
+
+/* ---------- PARALLAX ---------- */
+window.addEventListener("scroll",()=>{
+  document.querySelectorAll(".parallax").forEach(section=>{
+    const speed = 0.4;
+    section.style.backgroundPositionY =
+      window.pageYOffset * speed + "px";
+  });
+});
+
+</script>
+
+</body>
+</html>
