@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QSAR Drug Compatibility Predictor</title>
+    <title>Chemises</title>
     <style>
 :root {
 --purple-1: #7c3aed;   /* violet */
@@ -185,7 +185,9 @@ body {
     rgba(124, 58, 237, 0.08),
     rgba(168, 85, 247, 0.08),
     rgba(217, 70, 239, 0.06)
-);!important;
+overflow-x:hidden;
+)
+;!important;
     -webkit-font-smoothing: antialiased;
 scroll-behavior: smooth;
 }
@@ -194,6 +196,7 @@ scroll-behavior: smooth;
     max-width: var(--container-xl);
     margin: 0 auto;
     padding: var(--space-32) var(--space-16);
+    width:100%;
 }
 
 header {
@@ -583,30 +586,30 @@ footer {
 
 html, body {
 
-    background:
-        radial-gradient(circle at top left, #f5f5f7, transparent 60%),
-        radial-gradient(circle at bottom right, #e5e7eb, transparent 60%),
-        linear-gradient(180deg, #ffffff, #f3f4f6);
+background-image: url("https://images.unsplash.com/photo-1532187863486-abf9dbad1b69");
 
-    min-height: 100vh;
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+
+min-height:100vh;
+
 }
+body::after{
 
-@media (prefers-color-scheme: dark) {
-    html, body {
-        background:
-            radial-gradient(circle at top left, #1f1f23, transparent 60%),
-            radial-gradient(circle at bottom right, #2a2a30, transparent 60%),
-            linear-gradient(180deg, #0f0f12, #1a1a1f);
-    }
+content:"";
+
+position:fixed;
+inset:0;
+
+background: rgba(10,10,20,0.65);
+
+pointer-events:none;
+
+z-index:-1;
+
 }
-
-@media (prefers-color-scheme: dark) {
-    body {
-
-        color: rgba(255,255,255,0.9);
-    }
-}
-
 /* ============================= */
 /* PREMIUM FUTURISTIC EFFECTS   */
 /* ============================= */
@@ -616,6 +619,45 @@ html, body {
 .section,
 .selection-card,
 .result-card {
+}
+
+/* ============================= */
+/* SIMILAR MOLECULE CARDS */
+/* ============================= */
+
+.similar-card{
+
+background: linear-gradient(
+145deg,
+rgba(124,58,237,0.18),
+rgba(168,85,247,0.08)
+);
+
+border:1px solid rgba(168,85,247,0.4);
+
+box-shadow:
+0 0 20px rgba(124,58,237,0.25);
+
+transition: all 0.4s ease;
+
+}
+/* Similar Molecule Hover Effect */
+
+.similar-card:hover{
+transform: translateY(-4px) scale(1.02);
+box-shadow: 0 0 25px rgba(124,58,237,0.45);
+}
+.similarity-bar{
+
+background: linear-gradient(
+90deg,
+#7c3aed,
+#a855f7,
+#d946ef
+);
+
+}
+
     transition: all 0.4s ease;
 }
 
@@ -647,16 +689,7 @@ html, body {
 }
 
 /* 3. Animated Gradient Background */
-html, body {
-    background-size: 300% 300%;
-    animation: gradientMove 12s ease infinite;
-}
 
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
 
 /* 4. Neon Borders */
 .section,
@@ -772,18 +805,93 @@ html {
     scroll-behavior: smooth;
 }
 
+.glass-title-bar-footer{
+
+position:relative;
+
+left:50%;
+right:50%;
+
+margin-left:-50vw;
+margin-right:-50vw;
+
+width:99.6vw;
+
+margin-top:100px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+text-align:center;
+
+background:rgba(255,255,255,0.08);
+backdrop-filter: blur(12px);
+
+border-top:1px solid rgba(255,255,255,0.15);
+
+padding:18px;
+
+}
+.glass-title-bar-footer {
+
+color:white;
+	;
+font-size:13px;
+
+}
+
+/* ============================= */
+/* GLASS TITLE BAR */
+/* ============================= */
+
+.glassbar{
+
+position:relative;
+top:0;
+
+width:100%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:14px;
+
+background:rgba(255,255,255,0.08);
+backdrop-filter: blur(12px);
+
+border-bottom:1px solid rgba(255,255,255,0.15);
+
+z-index:2000;
+
+}
+
+.glassbar-title{
+
+color:white;
+font-size:20px;
+font-weight:600;
+letter-spacing:4px;
+
+}
+
+
 
     </style>
 </head>
 <body>
+
+<div class="glassbar">
+    <div class="glassbar-title">CHEMISES</div>
+</div>
+
+<div class="container">
     <div class="container">
-        <header>
-            <h1>C H E M I S I S</h1>
-            <p class="subtitle">Predict molecular compatibility using PubChem API and QSAR modeling</p>
-        </header>
 
         <div class="section">
-            <h2>🔍 Search Compounds via PubChem</h2>
+            <h2>Search Compounds via PubChem</h2>
             
             <div class="form-group">
                 <label for="searchType">Search By:</label>
@@ -808,7 +916,7 @@ html {
         </div>
 
         <div class="section">
-            <h2>📋 Available Compounds</h2>
+            <h2>Available Compounds</h2>
             <p style="color: var(--color-text-secondary); margin-bottom: var(--space-16);">
                 Select two compounds to analyze their compatibility
             </p>
@@ -818,7 +926,7 @@ html {
         </div>
 
         <div class="section" id="selectionSection">
-            <h2>✅ Selected Compounds</h2>
+            <h2>Selected Compounds</h2>
             <div class="selection-display">
                 <div class="selection-card" id="selectionA">
                     <h3>Compound A</h3>
@@ -840,29 +948,26 @@ html {
             </div>
 
             <button class="btn btn-primary" id="predictBtn" disabled style="width: 100%; margin-top: var(--space-16);">
-                🔮 Predict Compatibility
+                 Predict Compatibility
             </button>
         </div>
 
         <div class="section hidden" id="resultsSection">
-            <h2>📊 Prediction Results</h2>
+            <h2> Prediction Results</h2>
             <div id="resultsContent"></div>
         </div>
-
-        <footer>
-            <p><strong>QSAR Drug Compatibility Predictor</strong></p>
-            <p>Powered by PubChem API | Educational and Research Purposes Only</p>
-            <p style="margin-top: var(--space-8); font-size: var(--font-size-xs);">
-                ⚠️ This tool provides theoretical predictions only and should not be used for medical decisions
-            </p>
-        </footer>
-    </div>
+<div class="section">
+<h2> Prediction History</h2>
+<div id="historyList"></div>
+</div>
+</div>
 
     <script>
 // State management
 let compounds = [];
 let selectedA = null;
 let selectedB = null;
+let predictionHistory = JSON.parse(localStorage.getItem("chemisesHistory")) || [];
 
 // Example compounds database
 const exampleCompounds = [
@@ -890,9 +995,9 @@ const exampleCompounds = [
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    renderHistory();
     showStatus('Click "Load Example Compounds" to start or search for specific compounds', 'info');
 });
-
 function setupEventListeners() {
     document.getElementById('searchBtn').addEventListener('click', searchPubChem);
     document.getElementById('loadExamplesBtn').addEventListener('click', loadExamples);
@@ -939,6 +1044,7 @@ async function searchPubChem() {
             renderCompounds();
             showStatus(`Successfully loaded: ${compound.name}`, 'success');
             document.getElementById('searchQuery').value = '';
+            
         }
         
     } catch (error) {
@@ -1160,7 +1266,7 @@ function predictCompatibility() {
     // QSAR scoring based on Lipinski's Rule of Five and drug-likeness
     const prediction = calculateQSARScore(combinedProps, compA, compB);
     
-    displayResults(prediction, compA, compB, strategy);
+    displayResults(prediction, compA, compB, strategy, combinedProps);
 }
 
 // Calculate QSAR compatibility score
@@ -1255,14 +1361,166 @@ function calculateSimilarity(compA, compB) {
     
     return dotProduct / (Math.sqrt(magA) * Math.sqrt(magB));
 }
+function tanimotoSimilarity(compA, compB){
+
+    const vecA = [
+        compA.mw/500,
+        compA.logp/5,
+        compA.tpsa/140,
+        compA.hbd/5,
+        compA.hba/10
+    ];
+
+    const vecB = [
+        compB.mw/500,
+        compB.logp/5,
+        compB.tpsa/140,
+        compB.hbd/5,
+        compB.hba/10
+    ];
+
+    let dot = 0;
+    let magA = 0;
+    let magB = 0;
+
+    for(let i=0;i<vecA.length;i++){
+        dot += vecA[i]*vecB[i];
+        magA += vecA[i]*vecA[i];
+        magB += vecB[i]*vecB[i];
+    }
+
+    return dot/(magA+magB-dot);
+}
+function findSimilarMolecules(reference){
+
+    const results = compounds
+        .filter(c => c.cid !== reference.cid)
+        .map(c => ({
+            compound:c,
+            similarity:tanimotoSimilarity(reference,c)
+        }))
+        .sort((a,b)=>b.similarity-a.similarity)
+        .slice(0,5);
+
+    return results;
+}
 
 // Display prediction results
-function displayResults(prediction, compA, compB, strategy) {
+function displayResults(prediction, compA, compB, strategy, combinedProps) {
+window.lastPrediction = prediction;
+window.lastCombinedProps = combinedProps;
+window.lastStrategy = strategy;
+window.lastSimilar = findSimilarMolecules(compA);
     const resultsSection = document.getElementById('resultsSection');
     const resultsContent = document.getElementById('resultsContent');
     
     const isPositive = prediction.outcome === 'Compatible';
-    
+predictionHistory.push({
+compoundA: compA.name,
+compoundB: compB.name,
+outcome: prediction.outcome,
+confidence: prediction.confidence,
+strategy: strategy,
+date: new Date().toLocaleString()
+});
+
+localStorage.setItem("chemisesHistory", JSON.stringify(predictionHistory));
+const similar = findSimilarMolecules(compA);
+
+const similarHTML = `
+<div class="section" style="margin-top: var(--space-20);">
+
+<h2> Similar Molecules</h2>
+
+<div class="molecule-grid">
+
+${similar.map(s => `
+<div class="molecule-card similar-card">
+
+<h3>${s.compound.name}</h3>
+
+<p class="molecule-info"><strong>CID:</strong> ${s.compound.cid}</p>
+<p class="molecule-info"><strong>MW:</strong> ${s.compound.mw.toFixed(2)} g/mol</p>
+<p class="molecule-info"><strong>LogP:</strong> ${s.compound.logp.toFixed(2)}</p>
+
+<div class="similarity-meter">
+
+<div class="meter-container">
+<div class="meter-bar similarity-bar" 
+style="width:${(s.similarity*100)}%"></div>
+
+<span class="meter-value">
+${(s.similarity*100).toFixed(1)}%
+</span>
+</div>
+
+</div>
+
+</div>
+`).join("")}
+
+</div>
+
+</div>
+`;
+
+function downloadReport() {
+
+    if(selectedA === null || selectedB === null){
+        alert("No prediction available to download.");
+        return;
+    }
+
+    const compA = compounds[selectedA];
+    const compB = compounds[selectedB];
+
+    const outcome = document.querySelector(".outcome-badge")?.innerText || "Unknown";
+    const confidence = document.querySelector(".meter-value")?.innerText || "Unknown";
+
+    const report = `
+CHEMISES Compatibility Report
+================================
+
+Compound A
+-----------
+Name: ${compA.name}
+CID: ${compA.cid}
+Molecular Weight: ${compA.mw}
+LogP: ${compA.logp}
+TPSA: ${compA.tpsa}
+
+Compound B
+-----------
+Name: ${compB.name}
+CID: ${compB.cid}
+Molecular Weight: ${compB.mw}
+LogP: ${compB.logp}
+TPSA: ${compB.tpsa}
+
+Prediction Result
+-----------------
+Outcome: ${outcome}
+Confidence: ${confidence}
+
+Generated by CHEMISES
+`;
+
+    const blob = new Blob([report], {type: "text/plain"});
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "chemises_report.txt";
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}   
+
+ 
     resultsContent.innerHTML = `
         <div class="result-card ${isPositive ? 'positive' : 'negative'}">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-16);">
@@ -1272,6 +1530,9 @@ function displayResults(prediction, compA, compB, strategy) {
                 <span style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
                     Strategy: ${strategy.charAt(0).toUpperCase() + strategy.slice(1)}
                 </span>
+                <button class="btn btn-primary" onclick="downloadReport()">
+ Download Report
+</button>
             </div>
             
             <div class="confidence-meter">
@@ -1312,14 +1573,15 @@ function displayResults(prediction, compA, compB, strategy) {
                         `).join('')}
                     </tbody>
                 </table>
+              ${similarHTML}
             </div>
             
             <div style="background: var(--color-bg-7); padding: var(--space-16); border-radius: var(--radius-base); border: 1px solid var(--color-card-border);">
                 <p style="margin: 0; font-size: var(--font-size-sm);">
-                    <strong>📊 Overall QSAR Score:</strong> ${prediction.score}/100<br>
-                    <strong>🔬 Structural Similarity:</strong> ${prediction.similarity}<br>
-                    <strong>🧪 Compound A:</strong> ${compA.name} (CID: ${compA.cid})<br>
-                    <strong>🧪 Compound B:</strong> ${compB.name} (CID: ${compB.cid})
+                    <strong> Overall QSAR Score:</strong> ${prediction.score}/100<br>
+                    <strong> Structural Similarity:</strong> ${prediction.similarity}<br>
+                    <strong> Compound A:</strong> ${compA.name} (CID: ${compA.cid})<br>
+                    <strong> Compound B:</strong> ${compB.name} (CID: ${compB.cid})
                 </p>
             </div>
         </div>
@@ -1329,6 +1591,69 @@ function displayResults(prediction, compA, compB, strategy) {
     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+function downloadReport(){
+
+if(!window.lastPrediction){
+alert("No prediction available.");
+return;
+}
+
+const compA = compounds[selectedA];
+const compB = compounds[selectedB];
+const prediction = window.lastPrediction;
+const combined = window.lastCombinedProps;
+const strategy = window.lastStrategy;
+const similar = window.lastSimilar;
+
+const report = `
+CHEMISES - QSAR MOLECULAR PREDICTION REPORT
+===========================================
+
+Date: ${new Date().toLocaleString()}
+
+INPUT MOLECULES:
+- Molecule A: ${compA.name}
+- Molecule B: ${compB.name}
+- Combination Strategy: ${strategy}
+
+PREDICTION RESULTS:
+- Outcome: ${prediction.outcome}
+- Confidence: ${prediction.confidence.toFixed(2)}%
+
+COMBINED PROPERTIES:
+- Molecular Weight: ${combined.mw.toFixed(2)} g/mol
+- H-Bond Donors: ${combined.hbd}
+- H-Bond Acceptors: ${combined.hba}
+- LogP: ${combined.logp.toFixed(2)}
+- Rotatable Bonds: ${combined.rotbonds}
+- TPSA: ${combined.tpsa.toFixed(1)}
+- Heavy Atom Count: ${combined.hac}
+
+SIMILAR MOLECULES (Top 5):
+${similar.map((s,i)=>`${i+1}. ${s.compound.name} (${(s.similarity*100).toFixed(1)}% similarity)`).join("\n")}
+
+---
+Generated by Chemises QSAR Prediction System
+For research and educational purposes only.
+`;
+
+const blob = new Blob([report], { type: "text/plain" });
+
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = `chemises_prediction_${Date.now()}.txt`;
+
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+
+URL.revokeObjectURL(url);
+
+alert("Report downloaded successfully!");
+
+}
 // Show status message
 function showStatus(message, type = 'info', loading = false) {
     const statusDiv = document.getElementById('searchStatus');
@@ -1362,7 +1687,42 @@ document.addEventListener("DOMContentLoaded", () => {
         ".section, .molecule-card, .selection-card"
     ).forEach(el => observer.observe(el));
 });
+function renderHistory(){
+
+const container = document.getElementById("historyList");
+
+if(!container) return;
+
+if(predictionHistory.length === 0){
+container.innerHTML = "<p>No predictions yet.</p>";
+return;
+}
+
+container.innerHTML = predictionHistory
+.slice(-5)
+.reverse()
+.map(h => `
+<div class="molecule-card">
+<strong>${h.compoundA}</strong> + <strong>${h.compoundB}</strong><br>
+Result: ${h.outcome} (${h.confidence.toFixed(1)}%)<br>
+Strategy: ${h.strategy}<br>
+<small>${h.date}</small>
+</div>
+`).join("");
+
+}
+
 </script>
+
+<div class="glass-title-bar-footer">
+
+<p>QSAR Drug Compatibility Predictor</p>
+<p>Powered by PubChem API | Educational and Research Purposes Only</p>
+<p>This tool provides theoretical predictions only and should not be used for medical decisions</p>
+
+</div>
+
+</div> <!-- container -->
 
 </body>
 </html>
